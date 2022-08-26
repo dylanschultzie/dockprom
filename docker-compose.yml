@@ -7,6 +7,7 @@ networks:
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    caddy_data: {}
 
 services:
 
@@ -121,12 +122,16 @@ services:
     image: caddy:2.3.0
     container_name: caddy
     ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
       - "3000:3000"
       - "9090:9090"
       - "9093:9093"
       - "9091:9091"
     volumes:
       - ./caddy:/etc/caddy
+      - caddy_data:/data
     environment:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
