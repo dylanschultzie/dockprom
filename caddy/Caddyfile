@@ -1,25 +1,38 @@
+{
+    # email to use on Let's Encrypt
+    email hello@lavenderfive.com
+
+    # Uncomment for debug
+    #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+    #debug
+}
+
+
+(basic-auth) {
+       basicauth {
+           {$ADMIN_USER} {$ADMIN_PASSWORD_HASH}
+       }
+}
+
 :9090 {
-    basicauth /* {
-        {$ADMIN_USER} {$ADMIN_PASSWORD_HASH}
-    }
+    import basic-auth
     reverse_proxy prometheus:9090
 }
 
 :9093 {
-    basicauth /* {
-        {$ADMIN_USER} {$ADMIN_PASSWORD_HASH}
-    }
+    import basic-auth
     reverse_proxy alertmanager:9093
 }
 
 :9091 {
-    basicauth /* {
-        {$ADMIN_USER} {$ADMIN_PASSWORD_HASH}
-    }
-    
+    import basic-auth
     reverse_proxy pushgateway:9091
 }
 
 :3000 {
+    reverse_proxy grafana:3000
+}
+
+grafana.lavenderfive.com {
     reverse_proxy grafana:3000
 }
